@@ -1,0 +1,93 @@
+@baseUrl = http://localhost:3000
+
+### USERS
+### Create User
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Demo User",
+  "email": "demo@example.com"
+}
+
+
+### Get User by ID
+GET {{baseUrl}}/users/1
+
+
+### MEETINGS
+
+### Create Meeting (10:00 - 10:30) ✅
+POST {{baseUrl}}/meetings
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "title": "Initial Discussion",
+  "startTime": "2026-02-10T10:00:00.000Z",
+  "endTime": "2026-02-10T10:30:00.000Z"
+}
+
+
+### Create Overlapping Meeting (10:15 - 10:45)
+### Expected: 400 Time slot already booked
+POST {{baseUrl}}/meetings
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "title": "Overlapping Call",
+  "startTime": "2026-02-10T10:15:00.000Z",
+  "endTime": "2026-02-10T10:45:00.000Z"
+}
+
+
+### Create Non-Overlapping Meeting (10:30 - 11:00)
+POST {{baseUrl}}/meetings
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "title": "Follow-up Meeting",
+  "startTime": "2026-02-10T10:30:00.000Z",
+  "endTime": "2026-02-10T11:00:00.000Z"
+}
+
+
+### Get All Meetings
+GET {{baseUrl}}/meetings
+
+
+### Get Meetings by User
+GET {{baseUrl}}/meetings?userId=1
+
+
+### Get Meeting by ID
+GET {{baseUrl}}/meetings/1
+
+
+### Update Meeting (Try to Overlap)
+### Expected: 400 Time slot already booked
+PUT {{baseUrl}}/meetings/2
+Content-Type: application/json
+
+{
+  "title": "Updated Meeting",
+  "startTime": "2026-02-10T10:15:00.000Z",
+  "endTime": "2026-02-10T10:45:00.000Z"
+}
+
+
+### Update Meeting (Valid Update)
+PUT {{baseUrl}}/meetings/2
+Content-Type: application/json
+
+{
+  "title": "Updated Meeting",
+  "startTime": "2026-02-10T11:00:00.000Z",
+  "endTime": "2026-02-10T11:30:00.000Z"
+}
+
+
+### Delete Meeting
+DELETE {{baseUrl}}/meetings/2
